@@ -1,6 +1,29 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { Menu, X, Github, Linkedin, Mail, Code, Database, Palette, Smartphone, Layers, Server } from 'lucide-react';
+import {
+  SiJavascript,
+  SiPython,
+  SiOpenjdk,
+  SiHtml5,
+  SiCss3,
+  SiReact,
+  SiTailwindcss,
+  SiBootstrap,
+  SiFigma,
+  SiAdobephotoshop,
+  SiNodedotjs,
+  SiDjango,
+  SiLaravel,
+  SiPhp,
+  SiMongodb,
+  SiPostgresql,
+  SiMysql,
+  SiFirebase,
+  SiRedis,
+  SiCplusplus,
+  SiFlutter
+} from 'react-icons/si';
 
 export default function Portfolio() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,66 +59,39 @@ export default function Portfolio() {
   const projectsControls = useAnimation();
   const educationControls = useAnimation();
   const contactControls = useAnimation();
+  
 
-  const getSkillIcon = (name) => {
-    switch(name) {
-      case 'React':
-      case 'Bootstrap':
-        return Layers;
-      case 'JavaScript':
-      case 'Python':
-      case 'Java':
-      case 'HTML':
-        return Code;
-      case 'CSS':
-      case 'TailwindCSS':
-      case 'Figma':
-      case 'Adobe Photoshop':
-        return Palette;
-      case 'Node.js':
-      case 'Django':
-      case 'Laravel':
-      case 'PHP':
-        return Server;
-      case 'MongoDB':
-      case 'PostgreSQL':
-      case 'MySQL':
-      case 'Firebase':
-        return Database;
-      case 'Flutter':
-        return Smartphone;
-      default:
-        return Code;
-    }
-  };
-
+  // Skill data with icons and categories
   const skillsData = [
-    { name: 'JavaScript', category: 'Languages' },
-    { name: 'Python', category: 'Languages' },
-    { name: 'Java', category: 'Languages' },
-    { name: 'HTML', category: 'Languages' },
-    { name: 'CSS', category: 'Languages' },
-    { name: 'React', category: 'Frontend' },
-    { name: 'TailwindCSS', category: 'Frontend' },
-    { name: 'Bootstrap', category: 'Frontend' },
-    { name: 'Figma', category: 'Design' },
-    { name: 'Adobe Photoshop', category: 'Design' },
-    { name: 'Node.js', category: 'Backend' },
-    { name: 'Django', category: 'Backend' },
-    { name: 'Laravel', category: 'Backend' },
-    { name: 'PHP', category: 'Backend' },
-    { name: 'MongoDB', category: 'Backend' },
-    { name: 'PostgreSQL', category: 'Backend' },
-    { name: 'MySQL', category: 'Backend' },
-    { name: 'Firebase', category: 'Backend' },
-    { name: 'Flutter', category: 'Mobile' }
+    { name: 'JavaScript', category: 'Languages', icon: SiJavascript },
+    { name: 'Python', category: 'Languages', icon: SiPython },
+    { name: 'Java', category: 'Languages', icon: SiOpenjdk },
+    { name: 'HTML', category: 'Languages', icon: SiHtml5 },
+    { name: 'CSS', category: 'Languages', icon: SiCss3 },
+    { name: 'React', category: 'Frontend', icon: SiReact },
+    { name: 'TailwindCSS', category: 'Frontend', icon: SiTailwindcss },
+    { name: 'Bootstrap', category: 'Frontend', icon: SiBootstrap },
+    { name: 'Figma', category: 'Design', icon: SiFigma },
+    { name: 'Adobe Photoshop', category: 'Design', icon: SiAdobephotoshop },
+    { name: 'Node.js', category: 'Backend', icon: SiNodedotjs },
+    { name: 'Django', category: 'Backend', icon: SiDjango },
+    { name: 'C++', category: 'Languages', icon: SiCplusplus },
+    { name: 'Laravel', category: 'Backend', icon: SiLaravel },
+    { name: 'PHP', category: 'Backend', icon: SiPhp },
+    { name: 'MongoDB', category: 'Backend', icon: SiMongodb },
+    { name: 'PostgreSQL', category: 'Backend', icon: SiPostgresql },
+    { name: 'MySQL', category: 'Backend', icon: SiMysql },
+    { name: 'Firebase', category: 'Backend', icon: SiFirebase },
+    { name: 'Redis', category: 'Backend', icon: SiRedis },
+    { name: 'Flutter', category: 'Mobile', icon: SiFlutter }
   ];
 
   const categories = ['All', 'Languages', 'Frontend', 'Backend', 'Mobile', 'Design'];
-
-  const filteredSkills = selectedCategory === 'All'
-    ? skillsData
+  
+  const filteredSkills = selectedCategory === 'All' 
+    ? skillsData 
     : skillsData.filter(skill => skill.category === selectedCategory);
+
 
   useEffect(() => {
     const currentGreeting = greetings[currentGreetingIndex];
@@ -217,16 +213,20 @@ export default function Portfolio() {
         degree: 'Bachelor of Science in Information Technology',
         school: 'Asia Pacific College',
         period: 'Aug 2022 – Present',
-        icon: '🎓',
-        level: 'Higher Education'
+        icon: '/images/cropped-APC_Seal-Official-scaled.png',
+        level: 'College',
+        gwa: '3.8'
+
       },
       {
         id: 2,
         degree: 'Senior High School',
-        school: 'Asia Pacific College',
+        school: 'Signal Village National High School',
         period: '2020 – 2022',
-        icon: '📚',
-        level: 'Secondary Education'
+        icon: '/images/svnhs.png',
+        level: 'Senior High School',
+        gwa: '95'
+
       }
     ]);
   };
@@ -351,19 +351,48 @@ export default function Portfolio() {
 
       {/* HOME */}
       <section ref={sectionRefs.home} id="home" className="relative min-h-screen flex items-center justify-center pt-20 px-4">
-        <div className="max-w-6xl mx-auto w-full grid md:grid-cols-2 gap-8 items-center">
+        <div className="max-w-6xl mx-auto w-full grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
-            <h1 className="text-4xl md:text-5xl font-bold">Hi, I'm John Jorel T. Landicho</h1>
-            <p className="text-xl font-semibold">Full Stack Developer</p>
+            <h1 className="text-3xl md:text-4xl font-bold">Hi, I'm John Jorel T. Landicho</h1>
+            <p className="text-xl font-semibold">Web and Mobile Developer</p>
             <p className="text-lg min-h-12">{displayedText}<span className="animate-pulse">|</span></p>
             <div className="flex gap-4">
-              <button aria-label="GitHub" className={`p-3 rounded-lg transition ${isDarkMode ? 'bg-slate-800 hover:bg-slate-700' : 'bg-slate-200 hover:bg-slate-300'}`}><Github size={24} /></button>
-              <button aria-label="LinkedIn" className={`p-3 rounded-lg transition ${isDarkMode ? 'bg-slate-800 hover:bg-slate-700' : 'bg-slate-200 hover:bg-slate-300'}`}><Linkedin size={24} /></button>
-              <button aria-label="Email" className={`p-3 rounded-lg transition ${isDarkMode ? 'bg-slate-800 hover:bg-slate-700' : 'bg-slate-200 hover:bg-slate-300'}`}><Mail size={24} /></button>
+              <button 
+                aria-label="GitHub" 
+                onClick={() => window.open('https://github.com/johnjorellandicho', '_blank')}
+                className={`p-3 rounded-lg transition ${isDarkMode ? 'bg-slate-800 hover:bg-slate-700' : 'bg-slate-200 hover:bg-slate-300'}`}
+              >
+                <Github size={24} />
+              </button>
+              <button 
+                aria-label="LinkedIn" 
+                onClick={() => window.open('https://www.linkedin.com/in/jtlandicho/', '_blank')}
+                className={`p-3 rounded-lg transition ${isDarkMode ? 'bg-slate-800 hover:bg-slate-700' : 'bg-slate-200 hover:bg-slate-300'}`}
+              >
+                <Linkedin size={24} />
+              </button>
+              <button 
+                aria-label="Email" 
+                onClick={() => window.location.href = 'mailto:johnjorel.landicho8@gmail.com'}
+                className={`p-3 rounded-lg transition ${isDarkMode ? 'bg-slate-800 hover:bg-slate-700' : 'bg-slate-200 hover:bg-slate-300'}`}
+              >
+                <Mail size={24} />
+              </button>
+              <a 
+                href="/JohnJorel_CV.pdf" 
+                download 
+                className={`inline-block px-6 py-3 rounded-lg font-semibold transition ${isDarkMode ? 'bg-white text-slate-900 hover:bg-gray-200' : 'bg-slate-900 text-white hover:bg-slate-800'}`}
+              >
+                Download CV
+              </a>
             </div>
           </div>
-          <div className="flex justify-center">
-            <div className={`w-80 h-96 rounded-2xl flex items-center justify-center text-6xl border-2 ${isDarkMode ? 'bg-slate-800 border-slate-600' : 'bg-white border-slate-300'}`}>👨‍💻</div>
+          <div className="flex justify-end">
+            <img 
+              src="/images/sigekayonapogi.jpg" 
+              alt="Developer"
+              className="w-80 h-96 rounded-2xl object-cover border-2"
+            />
           </div>
         </div>
       </section>
@@ -379,7 +408,7 @@ export default function Portfolio() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {filteredSkills.map((skill, idx) => {
-              const Icon = getSkillIcon(skill.name);
+              const Icon = skill.icon;  // Use the icon directly from skillsData
               return (
                 <motion.div key={idx} onMouseEnter={() => setHoveredSkill(idx)} onMouseLeave={() => setHoveredSkill(null)} whileHover={{ scale: 1.05 }} className={`p-6 border rounded-xl flex flex-col items-center gap-3 cursor-pointer transition relative z-10 ${isDarkMode ? 'bg-slate-800 border-slate-600 hover:bg-slate-700' : 'bg-gray-50 border-slate-200 hover:bg-gray-100'}`}>
                   {hoveredSkill === idx ? (
@@ -463,13 +492,20 @@ export default function Portfolio() {
           <div className="flex justify-center">
             <div className="grid md:grid-cols-2 gap-6 w-fit">
               {education.map(edu => (
-                <motion.div key={edu.id} whileHover={{ scale: 1.05 }} className={`p-6 border rounded-xl text-center ${isDarkMode ? 'bg-slate-800 border-slate-600' : 'bg-white border-slate-200'}`}>
-                  <div className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center text-3xl ${isDarkMode ? 'bg-slate-700' : 'bg-slate-100'}`}>{edu.icon}</div>
-                  <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-slate-500'}`}>{edu.period}</p>
-                  <p className={`text-xs uppercase mt-2 ${isDarkMode ? 'text-gray-500' : 'text-slate-400'}`}>{edu.level}</p>
-                  <h3 className="text-lg font-bold mt-3">{edu.degree}</h3>
-                  <p className={isDarkMode ? 'text-gray-300' : 'text-slate-600'}>{edu.school}</p>
-                </motion.div>
+              <motion.div key={edu.id} whileHover={{ scale: 1.05 }} className={`p-6 border rounded-xl text-center ${isDarkMode ? 'bg-slate-800 border-slate-600' : 'bg-white border-slate-200'}`}>
+                <div className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center text-3xl overflow-hidden ${isDarkMode ? 'bg-slate-700' : 'bg-slate-100'}`}>
+                  {edu.icon.startsWith('/') ? (
+                    <img src={edu.icon} alt={edu.school} className="w-full h-full object-cover" />
+                  ) : (
+                    edu.icon
+                  )}
+                </div>
+                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-slate-500'}`}>{edu.period}</p>
+                <p className={`text-xs uppercase mt-2 ${isDarkMode ? 'text-gray-500' : 'text-slate-400'}`}>{edu.level}</p>
+                {edu.gwa && <p className={`text-sm font-semibold mt-3 ${isDarkMode ? 'text-gray-300' : 'text-slate-600'}`}>GWA: {edu.gwa}</p>}
+                <h3 className="text-lg font-bold mt-3">{edu.degree}</h3>
+                <p className={isDarkMode ? 'text-gray-300' : 'text-slate-600'}>{edu.school}</p>
+              </motion.div>
               ))}
             </div>
           </div>
