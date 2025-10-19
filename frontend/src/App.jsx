@@ -1,34 +1,6 @@
-// STEP 1: Install react-icons in your project
-// Run this command in your terminal:
-// npm install react-icons
-
-// STEP 2: Replace your entire Portfolio.jsx with this code:
-
-import React, { useState, useEffect } from 'react';
-import { Menu, X, Github, Linkedin, Mail } from 'lucide-react';
-
-// Import icons from react-icons/si (SimpleIcons) for brand logos
-import {
-  SiJavascript,
-  SiPython,
-  SiOpenjdk,
-  SiHtml5,
-  SiCss3,
-  SiReact,
-  SiTailwindcss,
-  SiBootstrap,
-  SiFigma,
-  SiAdobephotoshop,
-  SiNodedotjs,
-  SiDjango,
-  SiLaravel,
-  SiPhp,
-  SiMongodb,
-  SiPostgresql,
-  SiMysql,
-  SiFirebase,
-  SiFlutter
-} from 'react-icons/si';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { motion, useAnimation } from 'framer-motion';
+import { Menu, X, Github, Linkedin, Mail, Code, Database, Palette, Smartphone, Layers, Server } from 'lucide-react';
 
 export default function Portfolio() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -50,118 +22,191 @@ export default function Portfolio() {
     "Creating digital experiences."
   ];
 
-  // Skill data with icons and categories
+  const sectionRefs = {
+    home: useRef(null),
+    skills: useRef(null),
+    experience: useRef(null),
+    projects: useRef(null),
+    education: useRef(null),
+    contact: useRef(null)
+  };
+
+  const skillsControls = useAnimation();
+  const experienceControls = useAnimation();
+  const projectsControls = useAnimation();
+  const educationControls = useAnimation();
+  const contactControls = useAnimation();
+
+  const getSkillIcon = (name) => {
+    switch(name) {
+      case 'React':
+      case 'Bootstrap':
+        return Layers;
+      case 'JavaScript':
+      case 'Python':
+      case 'Java':
+      case 'HTML':
+        return Code;
+      case 'CSS':
+      case 'TailwindCSS':
+      case 'Figma':
+      case 'Adobe Photoshop':
+        return Palette;
+      case 'Node.js':
+      case 'Django':
+      case 'Laravel':
+      case 'PHP':
+        return Server;
+      case 'MongoDB':
+      case 'PostgreSQL':
+      case 'MySQL':
+      case 'Firebase':
+        return Database;
+      case 'Flutter':
+        return Smartphone;
+      default:
+        return Code;
+    }
+  };
+
   const skillsData = [
-    { name: 'JavaScript', category: 'Languages', icon: SiJavascript },
-    { name: 'Python', category: 'Languages', icon: SiPython },
-    { name: 'Java', category: 'Languages', icon: SiOpenjdk },
-    { name: 'HTML', category: 'Languages', icon: SiHtml5 },
-    { name: 'CSS', category: 'Languages', icon: SiCss3 },
-    { name: 'React', category: 'Frontend', icon: SiReact },
-    { name: 'TailwindCSS', category: 'Frontend', icon: SiTailwindcss },
-    { name: 'Bootstrap', category: 'Frontend', icon: SiBootstrap },
-    { name: 'Figma', category: 'Design', icon: SiFigma },
-    { name: 'Adobe Photoshop', category: 'Design', icon: SiAdobephotoshop },
-    { name: 'Node.js', category: 'Backend', icon: SiNodedotjs },
-    { name: 'Django', category: 'Backend', icon: SiDjango },
-    { name: 'Laravel', category: 'Backend', icon: SiLaravel },
-    { name: 'PHP', category: 'Backend', icon: SiPhp },
-    { name: 'MongoDB', category: 'Backend', icon: SiMongodb },
-    { name: 'PostgreSQL', category: 'Backend', icon: SiPostgresql },
-    { name: 'MySQL', category: 'Backend', icon: SiMysql },
-    { name: 'Firebase', category: 'Backend', icon: SiFirebase },
-    { name: 'Flutter', category: 'Mobile', icon: SiFlutter }
+    { name: 'JavaScript', category: 'Languages' },
+    { name: 'Python', category: 'Languages' },
+    { name: 'Java', category: 'Languages' },
+    { name: 'HTML', category: 'Languages' },
+    { name: 'CSS', category: 'Languages' },
+    { name: 'React', category: 'Frontend' },
+    { name: 'TailwindCSS', category: 'Frontend' },
+    { name: 'Bootstrap', category: 'Frontend' },
+    { name: 'Figma', category: 'Design' },
+    { name: 'Adobe Photoshop', category: 'Design' },
+    { name: 'Node.js', category: 'Backend' },
+    { name: 'Django', category: 'Backend' },
+    { name: 'Laravel', category: 'Backend' },
+    { name: 'PHP', category: 'Backend' },
+    { name: 'MongoDB', category: 'Backend' },
+    { name: 'PostgreSQL', category: 'Backend' },
+    { name: 'MySQL', category: 'Backend' },
+    { name: 'Firebase', category: 'Backend' },
+    { name: 'Flutter', category: 'Mobile' }
   ];
 
   const categories = ['All', 'Languages', 'Frontend', 'Backend', 'Mobile', 'Design'];
-  
-  const filteredSkills = selectedCategory === 'All' 
-    ? skillsData 
+
+  const filteredSkills = selectedCategory === 'All'
+    ? skillsData
     : skillsData.filter(skill => skill.category === selectedCategory);
 
-  // Typing animation for greetings
   useEffect(() => {
     const currentGreeting = greetings[currentGreetingIndex];
     let index = 0;
-
-    const interval = setInterval(() => {
+    let timeoutId;
+    
+    const typeCharacter = () => {
       if (index < currentGreeting.length) {
         setDisplayedText(currentGreeting.slice(0, index + 1));
         index++;
+        timeoutId = setTimeout(typeCharacter, 50);
       } else {
-        const timeout = setTimeout(() => {
+        timeoutId = setTimeout(() => {
           setCurrentGreetingIndex((prev) => (prev + 1) % greetings.length);
           setDisplayedText('');
         }, 2000);
-        clearInterval(interval);
-        return () => clearTimeout(timeout);
-      }
-    }, 50);
-
-    return () => clearInterval(interval);
-  }, [currentGreetingIndex]);
-
-  // Fetch data from backend
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const apiUrl = 'http://localhost:5000/api';
-
-        try {
-          const [projRes, expRes, eduRes] = await Promise.all([
-            fetch(`${apiUrl}/projects`),
-            fetch(`${apiUrl}/experiences`),
-            fetch(`${apiUrl}/education`)
-          ]);
-
-          if (projRes.ok) setProjects(await projRes.json());
-          if (expRes.ok) setExperiences(await expRes.json());
-          if (eduRes.ok) setEducation(await eduRes.json());
-        } catch (err) {
-          console.log('Backend not available');
-          loadFallbackData();
-        }
-      } catch (err) {
-        console.error('Error:', err);
-        loadFallbackData();
       }
     };
+    
+    typeCharacter();
+    
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [currentGreetingIndex]);
 
-    fetchData();
+  useEffect(() => {
+    loadFallbackData();
   }, []);
 
   const loadFallbackData = () => {
     setProjects([
       {
         id: 1,
-        title: 'E-Commerce Platform',
-        description: 'Full-stack e-commerce with real-time inventory.',
-        image: '🛍️',
-        tech: ['React', 'Node.js', 'MongoDB'],
+        title: 'AlwaysOnTrack (Capstone)',
+        description: 'Mobile IoT tracker app with real-time analytics built using Flutter and Firebase.',
+        image: '📱',
+        tech: ['Flutter', 'Firebase', 'IoT'],
+        tag: 'Mobile Application',
+        links: { demo: '#', github: '#' }
+      },
+      {
+        id: 2,
+        title: 'NAMFREL Analytics',
+        description: 'Election data analytics platform ensuring system reliability and data accuracy.',
+        image: '📊',
+        tech: ['Django', 'PostgreSQL', 'React'],
         tag: 'Web Application',
-        links: { demo: 'https://example.com', github: 'https://github.com' }
+        links: { demo: '#', github: '#' }
+      },
+      {
+        id: 3,
+        title: 'ParkSense',
+        description: 'Full-stack parking management system integrating hardware sensors, MongoDB, and Redis.',
+        image: '🚗',
+        tech: ['Django', 'MongoDB', 'Redis'],
+        tag: 'IoT System',
+        links: { demo: '#', github: '#' }
+      },
+      {
+        id: 4,
+        title: 'Bamboo Warriors Philippines Application',
+        description: 'Mobile application for Bamboo Warriors Philippines designed to educate and promote bamboo propagation. Features an intuitive interface with seamless navigation and optimized responsiveness across Android devices.',
+        image: '🚗',
+        tech: ['Android Studio', 'Figma', 'Java'],
+        tag: 'Mobile Application',
+        links: { demo: '#', github: '#' }
       }
     ]);
 
     setExperiences([
       {
         id: 1,
-        title: 'Student Developer – Capstone Project',
-        company: 'St. Dominic College of Asia',
-        period: 'Oct 2024 – Present',
+        title: 'AlwaysOnTrack Mobile Application (Capstone)',
+        company: 'Asia Pacific College',
+        period: 'Aug 2025 – Oct 2025',
         bullets: [
-          'Co-developed PULSE — a barangay-level mobile application built with Flutter and Firebase, featuring a Material Design UI with custom animations.',
-          'Built the SuperAdmin web dashboard using Flutter Web with responsive layouts and data visualization tools to manage admin registrations, verify community credentials, and monitor real-time platform analytics'
+          'Led development of real-time tracking and monitoring mobile app with IoT integration.',
+          'Ensured accurate data visualization and seamless cross-platform experience.'
         ]
       },
       {
         id: 2,
-        title: 'Full-Stack Developer (Personal Projects)',
-        company: 'Self-Initiated | Freelance-style builds',
-        period: '2024 – Present',
+        title: 'NAMFREL Analytics Project',
+        company: 'Asia Pacific College',
+        period: 'May 2025 – Jun 2025',
         bullets: [
-          'IskedyulKo — Appointment Booking System (React, Node.js, MySQL): Designed a shareable, no-login booking flow with business dashboards, JWT auth, and a responsive UI for small Filipino businesses.',
-          'S&Z Hot Pot Haven — E-commerce platform (PHP, MySQL, Bootstrap): Built a product catalog, shopping cart, admin panel, and integrated payment gateway for a local restaurant.'
+          'Served as QA officer ensuring data accuracy and system reliability during the 2025 elections.',
+          'Validated analytics results and monitored backend performance under load.'
+        ]
+      },
+      {
+        id: 3,
+        title: 'ParkSense – Parking Management System',
+        company: 'Asia Pacific College',
+        period: 'Mar 2024 – Jun 2025',
+        bullets: [
+          'Served as team leader in the capstone project, Parking Management System, overseeing project planning, task delegation, and coordination between hardware and software teams.',
+          'Stored and managed data with MongoDB, with Redis acting as a change-tracking layer.',
+          'Enabled authenticated users to view available slots, with admins granted access to analytics and full system controls.',
+        ]
+      },
+      {
+        id: 4,
+        title: 'Mobile Application Developer - Bamboo Warriors Philippines',
+        company: 'Asia Pacific College',
+        period: 'Sept 2023 – Nov 2023',
+        bullets: [
+          'Designed a user-friendly interface for the Bamboo Verse app using Figma, focusing on intuitive navigation and clean aesthetics.',
+          'Developed and implemented app functionality using Android Studio, ensuring stable performance across key features.',
+          'Optimized UI/UX for responsiveness, providing seamless user experience across various screen sizes and Android devices.'
         ]
       }
     ]);
@@ -169,48 +214,103 @@ export default function Portfolio() {
     setEducation([
       {
         id: 1,
-        degree: 'Bachelor of Science in IT',
-        school: 'St. Dominic College of Asia',
-        period: '2020 - 2024',
+        degree: 'Bachelor of Science in Information Technology',
+        school: 'Asia Pacific College',
+        period: 'Aug 2022 – Present',
         icon: '🎓',
         level: 'Higher Education'
+      },
+      {
+        id: 2,
+        degree: 'Senior High School',
+        school: 'Asia Pacific College',
+        period: '2020 – 2022',
+        icon: '📚',
+        level: 'Secondary Education'
       }
     ]);
   };
 
+  const handleScroll = useCallback(() => {
+    const scrollPos = window.scrollY + 200;
+    for (const key in sectionRefs) {
+      const section = sectionRefs[key].current;
+      if (section && section.offsetTop <= scrollPos && section.offsetTop + section.offsetHeight > scrollPos) {
+        setActiveSection(key);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
+
   const scrollToSection = (id) => {
-    setActiveSection(id);
-    setIsMenuOpen(false);
-    const element = document.getElementById(id);
-    element?.scrollIntoView({ behavior: 'smooth' });
+    const section = sectionRefs[id].current;
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+      setActiveSection(id);
+      setIsMenuOpen(false);
+    }
   };
+
+  useEffect(() => {
+    const observerOptions = { threshold: 0.2 };
+    
+    const skillsObserver = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) skillsControls.start({ opacity: 1, y: 0 });
+      else skillsControls.start({ opacity: 0, y: 60 });
+    }, observerOptions);
+
+    const experienceObserver = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) experienceControls.start({ opacity: 1, y: 0 });
+      else experienceControls.start({ opacity: 0, y: 60 });
+    }, observerOptions);
+
+    const projectsObserver = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) projectsControls.start({ opacity: 1, y: 0 });
+      else projectsControls.start({ opacity: 0, y: 60 });
+    }, observerOptions);
+
+    const educationObserver = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) educationControls.start({ opacity: 1, y: 0 });
+      else educationControls.start({ opacity: 0, y: 60 });
+    }, observerOptions);
+
+    const contactObserver = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) contactControls.start({ opacity: 1, y: 0 });
+      else contactControls.start({ opacity: 0, y: 60 });
+    }, observerOptions);
+
+    if (sectionRefs.skills.current) skillsObserver.observe(sectionRefs.skills.current);
+    if (sectionRefs.experience.current) experienceObserver.observe(sectionRefs.experience.current);
+    if (sectionRefs.projects.current) projectsObserver.observe(sectionRefs.projects.current);
+    if (sectionRefs.education.current) educationObserver.observe(sectionRefs.education.current);
+    if (sectionRefs.contact.current) contactObserver.observe(sectionRefs.contact.current);
+
+    return () => {
+      skillsObserver.disconnect();
+      experienceObserver.disconnect();
+      projectsObserver.disconnect();
+      educationObserver.disconnect();
+      contactObserver.disconnect();
+    };
+  }, [skillsControls, experienceControls, projectsControls, educationControls, contactControls]);
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleFormSubmit = async (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
     setFormStatus('sending');
-
-    try {
-      const response = await fetch('http://localhost:5000/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-
-      if (response.ok) {
-        setFormStatus('success');
-        setFormData({ name: '', email: '', message: '' });
-        setTimeout(() => setFormStatus(''), 3000);
-      } else {
-        setFormStatus('error');
-      }
-    } catch (err) {
-      setFormStatus('error');
-    }
+    setTimeout(() => {
+      setFormStatus('success');
+      setFormData({ name: '', email: '', message: '' });
+      setTimeout(() => setFormStatus(''), 3000);
+    }, 1000);
   };
 
   const navItems = [
@@ -223,331 +323,196 @@ export default function Portfolio() {
   ];
 
   return (
-    <div className={isDarkMode ? "min-h-screen bg-slate-900 text-white overflow-x-hidden" : "min-h-screen bg-gray-50 text-slate-900 overflow-x-hidden"}>
-
-      <nav className={isDarkMode ? "fixed top-0 w-full z-50 backdrop-blur-sm bg-slate-900/95 border-b border-slate-700" : "fixed top-0 w-full z-50 backdrop-blur-sm bg-white/95 border-b border-slate-200"}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <button onClick={() => scrollToSection('home')} className="text-2xl font-bold">
-              JJL
-            </button>
-
-            <div className="hidden md:flex gap-1 items-center">
-              {navItems.map(item => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`px-4 py-2 rounded-lg transition duration-300 ${
-                    activeSection === item.id 
-                      ? isDarkMode ? 'bg-white text-slate-900 font-semibold' : 'bg-slate-900 text-white font-semibold'
-                      : isDarkMode ? 'hover:bg-slate-800 text-gray-300' : 'hover:bg-slate-100 text-slate-600'
-                  }`}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-
-            <div className="flex items-center gap-4">
+    <div className={`min-h-screen overflow-x-hidden transition-colors duration-300 ${isDarkMode ? 'bg-slate-900 text-white' : 'bg-gray-50 text-slate-900'}`}>
+      <nav className={`fixed top-0 w-full z-50 border-b transition-colors ${isDarkMode ? 'bg-slate-900/95 border-slate-700' : 'bg-white/95 border-slate-200'}`}>
+        <div className="max-w-7xl mx-auto px-4 flex justify-between items-center h-16">
+          <button onClick={() => scrollToSection('home')} className="text-2xl font-bold">JJL</button>
+          <div className="hidden md:flex gap-2 items-center">
+            {navItems.map(item => (
               <button
-                onClick={() => setIsDarkMode(!isDarkMode)}
-                className={`p-2 rounded-lg transition ${isDarkMode ? 'bg-slate-800 hover:bg-slate-700' : 'bg-slate-100 hover:bg-slate-200'}`}
+                key={item.id}
+                onClick={() => scrollToSection(item.id)}
+                className={`px-4 py-2 rounded-lg transition ${
+                  activeSection === item.id
+                    ? isDarkMode ? 'bg-white text-slate-900 font-semibold' : 'bg-slate-900 text-white font-semibold'
+                    : isDarkMode ? 'hover:bg-slate-800 text-gray-300' : 'hover:bg-slate-100 text-slate-600'
+                }`}
               >
-                {isDarkMode ? '☀️' : '🌙'}
+                {item.label}
               </button>
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className={`md:hidden p-2 rounded-lg transition ${isDarkMode ? 'hover:bg-slate-800' : 'hover:bg-slate-100'}`}
-              >
-                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
-            </div>
+            ))}
           </div>
-
-          {isMenuOpen && (
-            <div className={isDarkMode ? "md:hidden pb-4 space-y-2 bg-slate-800/50 rounded-lg p-4" : "md:hidden pb-4 space-y-2 bg-slate-50/80 rounded-lg p-4"}>
-              {navItems.map(item => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={isDarkMode ? "block w-full text-left px-4 py-2 hover:bg-slate-700 rounded-lg transition text-gray-300" : "block w-full text-left px-4 py-2 hover:bg-slate-200 rounded-lg transition text-slate-700"}
-                >
-                  {item.label}
-                </button>
-              ))}
-            </div>
-          )}
+          <div className="flex items-center gap-4">
+            <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2 rounded-lg">{isDarkMode ? '☀️' : '🌙'}</button>
+            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden p-2">{isMenuOpen ? <X size={24} /> : <Menu size={24} />}</button>
+          </div>
         </div>
       </nav>
 
-      <section id="home" className={isDarkMode ? "relative min-h-screen flex items-center justify-center pt-20 px-4" : "relative min-h-screen flex items-center justify-center pt-20 px-4"}>
-        <div className="max-w-6xl mx-auto w-full">
-          <div className="grid md:grid-cols-[2fr,1fr] gap-8 items-center">
-            <div className="space-y-6">
-              <h1 className={isDarkMode ? "text-4xl md:text-5xl font-bold" : "text-4xl md:text-5xl font-bold text-slate-900"}>
-                Hi, I'm John Jorel T. Landicho
-              </h1>
-              
-              <p className={isDarkMode ? "text-xl font-semibold" : "text-xl font-semibold"}>Full Stack Developer</p>
-              
-              <p className={isDarkMode ? "text-lg text-gray-300 min-h-12" : "text-lg text-slate-600 min-h-12"}>
-                {displayedText}
-                <span className="animate-pulse">|</span>
-              </p>
-              
-              <div className="flex gap-4">
-                <button
-                  onClick={() => scrollToSection('projects')}
-                  className={isDarkMode ? "px-8 py-3 bg-white text-slate-900 rounded-full font-semibold hover:bg-gray-200 transition" : "px-8 py-3 bg-slate-900 text-white rounded-full font-semibold hover:bg-slate-800 transition"}
-                >
-                  View My Work
-                </button>
-                <button
-                  onClick={() => scrollToSection('contact')}
-                  className={isDarkMode ? "px-8 py-3 border-2 border-white rounded-full font-semibold hover:bg-white hover:text-slate-900 transition" : "px-8 py-3 border-2 border-slate-900 rounded-full font-semibold hover:bg-slate-900 hover:text-white transition"}
-                >
-                  Contact
-                </button>
-              </div>
-
-              <div className="flex gap-4">
-                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className={isDarkMode ? "p-3 bg-slate-800 hover:bg-slate-700 rounded-lg transition" : "p-3 bg-slate-200 hover:bg-slate-300 rounded-lg transition text-slate-900"}>
-                  <Github size={24} />
-                </a>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className={isDarkMode ? "p-3 bg-slate-800 hover:bg-slate-700 rounded-lg transition" : "p-3 bg-slate-200 hover:bg-slate-300 rounded-lg transition text-slate-900"}>
-                  <Linkedin size={24} />
-                </a>
-                <a href="mailto:your.email@example.com" className={isDarkMode ? "p-3 bg-slate-800 hover:bg-slate-700 rounded-lg transition" : "p-3 bg-slate-200 hover:bg-slate-300 rounded-lg transition text-slate-900"}>
-                  <Mail size={24} />
-                </a>
-              </div>
+      {/* HOME */}
+      <section ref={sectionRefs.home} id="home" className="relative min-h-screen flex items-center justify-center pt-20 px-4">
+        <div className="max-w-6xl mx-auto w-full grid md:grid-cols-2 gap-8 items-center">
+          <div className="space-y-6">
+            <h1 className="text-4xl md:text-5xl font-bold">Hi, I'm John Jorel T. Landicho</h1>
+            <p className="text-xl font-semibold">Full Stack Developer</p>
+            <p className="text-lg min-h-12">{displayedText}<span className="animate-pulse">|</span></p>
+            <div className="flex gap-4">
+              <button aria-label="GitHub" className={`p-3 rounded-lg transition ${isDarkMode ? 'bg-slate-800 hover:bg-slate-700' : 'bg-slate-200 hover:bg-slate-300'}`}><Github size={24} /></button>
+              <button aria-label="LinkedIn" className={`p-3 rounded-lg transition ${isDarkMode ? 'bg-slate-800 hover:bg-slate-700' : 'bg-slate-200 hover:bg-slate-300'}`}><Linkedin size={24} /></button>
+              <button aria-label="Email" className={`p-3 rounded-lg transition ${isDarkMode ? 'bg-slate-800 hover:bg-slate-700' : 'bg-slate-200 hover:bg-slate-300'}`}><Mail size={24} /></button>
             </div>
-
-            <div className="flex justify-center">
-              <img 
-                src="/images/sigekayonapogi.jpg" 
-                alt="John Jorel Landicho"
-                className={isDarkMode ? "w-80 h-96 object-cover border-2 border-gray-600 rounded-2xl" : "w-80 h-96 object-cover border-2 border-slate-400 rounded-2xl"}
-              />
-            </div>
+          </div>
+          <div className="flex justify-center">
+            <div className={`w-80 h-96 rounded-2xl flex items-center justify-center text-6xl border-2 ${isDarkMode ? 'bg-slate-800 border-slate-600' : 'bg-white border-slate-300'}`}>👨‍💻</div>
           </div>
         </div>
       </section>
 
-      <section id="skills" className={isDarkMode ? "py-20 px-4 bg-slate-800" : "py-20 px-4 bg-white"}>
+      {/* SKILLS */}
+      <motion.section ref={sectionRefs.skills} id="skills" initial={{ opacity: 0, y: 60 }} animate={skillsControls} transition={{ duration: 0.8 }} className={`py-20 px-4 pt-32 ${isDarkMode ? 'bg-slate-800' : 'bg-white'}`}>
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold mb-12">Skills & Technologies</h2>
-
+          <h2 className="text-4xl font-bold mb-12 text-center">Skills & Technologies</h2>
           <div className="flex flex-wrap gap-2 mb-8 justify-center">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-full font-semibold transition ${
-                  selectedCategory === category
-                    ? isDarkMode ? 'bg-white text-slate-900' : 'bg-slate-900 text-white'
-                    : isDarkMode ? 'bg-slate-700 text-gray-300 hover:bg-slate-600' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
-                }`}
-              >
-                {category}
-              </button>
+            {categories.map(category => (
+              <button key={category} onClick={() => setSelectedCategory(category)} className={`px-4 py-2 rounded-full font-semibold transition ${selectedCategory === category ? isDarkMode ? 'bg-white text-slate-900' : 'bg-slate-900 text-white' : isDarkMode ? 'bg-slate-700 text-gray-300 hover:bg-slate-600' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}>{category}</button>
             ))}
           </div>
-
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {filteredSkills.map((skill, idx) => {
-              const IconComponent = skill.icon;
+              const Icon = getSkillIcon(skill.name);
               return (
-                <div
-                  key={idx}
-                  onMouseEnter={() => setHoveredSkill(idx)}
-                  onMouseLeave={() => setHoveredSkill(null)}
-                  className={isDarkMode ? "p-6 bg-slate-800 border border-gray-600 rounded-xl text-center hover:bg-slate-700 transition flex flex-col items-center gap-3 cursor-pointer" : "p-6 bg-white border border-slate-300 rounded-xl text-center hover:bg-slate-50 transition flex flex-col items-center gap-3 cursor-pointer"}
-                >
+                <motion.div key={idx} onMouseEnter={() => setHoveredSkill(idx)} onMouseLeave={() => setHoveredSkill(null)} whileHover={{ scale: 1.05 }} className={`p-6 border rounded-xl flex flex-col items-center gap-3 cursor-pointer transition relative z-10 ${isDarkMode ? 'bg-slate-800 border-slate-600 hover:bg-slate-700' : 'bg-gray-50 border-slate-200 hover:bg-gray-100'}`}>
                   {hoveredSkill === idx ? (
-                    <div className="flex flex-col items-center gap-1">
-                      <span className="text-sm font-medium">{skill.name}</span>
-                      <span className={`text-xs px-2 py-1 rounded ${isDarkMode ? 'bg-slate-700 text-gray-300' : 'bg-slate-200 text-slate-700'}`}>{skill.category}</span>
+                    <div className={`text-center absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 p-3 rounded-lg whitespace-nowrap z-20 ${isDarkMode ? 'bg-slate-700 text-white' : 'bg-slate-800 text-white'}`}>
+                      <span className="text-sm font-medium block">{skill.name}</span>
+                      <span className="text-xs block mt-1 opacity-80">{skill.category}</span>
+                      <div className={`absolute top-full left-1/2 transform -translate-x-1/2 w-2 h-2 ${isDarkMode ? 'bg-slate-700' : 'bg-slate-800'}`} style={{clipPath: 'polygon(0 0, 100% 0, 50% 100%)'}}></div>
                     </div>
-                  ) : (
-                    <IconComponent size={32} className={isDarkMode ? "text-gray-300" : "text-slate-700"} />
-                  )}
-                </div>
+                  ) : null}
+                  <Icon size={32} />
+                </motion.div>
               );
             })}
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      <section id="experience" className={isDarkMode ? "py-20 px-4 bg-slate-900" : "py-20 px-4 bg-gray-50"}>
+      {/* EXPERIENCE */}
+      <motion.section ref={sectionRefs.experience} id="experience" initial={{ opacity: 0, y: 60 }} animate={experienceControls} transition={{ duration: 0.8 }} className={`py-20 px-4 pt-32 ${isDarkMode ? 'bg-slate-900' : 'bg-gray-50'}`}>
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold mb-8 text-center">Experience</h2>
-          <p className={isDarkMode ? "text-center text-gray-400 mb-12" : "text-center text-slate-500 mb-12"}>
-            My development journey and project highlights
-          </p>
-
+          <h2 className="text-4xl font-bold mb-12 text-center">Experience</h2>
           <div className="relative">
-            <div className={isDarkMode ? "absolute left-6 top-0 bottom-0 w-0.5 bg-gray-600" : "absolute left-6 top-0 bottom-0 w-0.5 bg-slate-400"}></div>
-
-            <div className="space-y-12">
-              {experiences.map((exp) => (
-                <div key={exp.id} className="relative pl-16">
-                  <div className={isDarkMode ? "absolute left-4 top-2 w-5 h-5 bg-white rounded-full border-4 border-slate-900" : "absolute left-4 top-2 w-5 h-5 bg-slate-900 rounded-full border-4 border-slate-100"}></div>
-                  
-                  <div className={isDarkMode ? "p-6 bg-slate-800 border border-gray-600 rounded-xl" : "p-6 bg-white border border-slate-300 rounded-xl"}>
-                    <h3 className="text-xl font-bold mb-1">{exp.title}</h3>
-                    <p className={isDarkMode ? "text-gray-300 font-medium" : "text-slate-700 font-medium"}>{exp.company}</p>
-                    <p className={isDarkMode ? "text-gray-400 text-sm mb-4" : "text-slate-500 text-sm mb-4"}>{exp.period}</p>
-                    <ul className="space-y-3">
-                      {exp.bullets.map((bullet, i) => (
-                        <li key={i} className={isDarkMode ? "text-gray-300 text-sm leading-relaxed" : "text-slate-600 text-sm leading-relaxed"}>• {bullet}</li>
+            <div className={`absolute left-8 top-0 bottom-0 w-1 ${isDarkMode ? 'bg-slate-600' : 'bg-slate-300'}`}></div>
+            <div className="space-y-8">
+              {experiences.map((exp, idx) => (
+                <motion.div key={exp.id} initial={{ opacity: 0, x: -20 }} animate={experienceControls} transition={{ delay: idx * 0.1 }} className="relative pl-32">
+                  <div className={`absolute left-0 top-2 w-12 h-12 rounded-full flex items-center justify-center ${isDarkMode ? 'bg-slate-700 text-white' : 'bg-slate-200 text-slate-900'} border-4 ${isDarkMode ? 'border-slate-900' : 'border-gray-50'}`}>
+                    <span className="text-xl font-bold">●</span>
+                  </div>
+                  <div className={`p-6 border rounded-xl ${isDarkMode ? 'bg-slate-800 border-slate-600' : 'bg-white border-slate-200'}`}>
+                    <h3 className="text-xl font-bold">{exp.title}</h3>
+                    <p className={`font-medium ${isDarkMode ? 'text-gray-300' : 'text-slate-600'}`}>{exp.company}</p>
+                    <p className={`text-sm mb-4 ${isDarkMode ? 'text-gray-400' : 'text-slate-500'}`}>{exp.period}</p>
+                    <ul className="space-y-2">
+                      {exp.bullets.map((b, i) => (
+                        <li key={i} className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-slate-700'}`}>• {b}</li>
                       ))}
                     </ul>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      <section id="projects" className={isDarkMode ? "py-20 px-4 bg-slate-800" : "py-20 px-4 bg-white"}>
+      {/* PROJECTS */}
+      <motion.section ref={sectionRefs.projects} id="projects" initial={{ opacity: 0, y: 60 }} animate={projectsControls} transition={{ duration: 0.8 }} className={`py-20 px-4 pt-32 ${isDarkMode ? 'bg-slate-800' : 'bg-white'}`}>
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold mb-12">Featured Projects</h2>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map(project => (
-              <div key={project.id} className={isDarkMode ? "bg-slate-800 border border-gray-600 rounded-xl overflow-hidden hover:border-white transition" : "bg-white border border-slate-300 rounded-xl overflow-hidden hover:border-slate-900 transition"}>
-                <div className={isDarkMode ? "h-48 bg-slate-700 flex items-center justify-center text-6xl" : "h-48 bg-slate-200 flex items-center justify-center text-6xl"}>
-                  {project.image}
-                </div>
+          <h2 className="text-4xl font-bold mb-12 text-center">Featured Projects</h2>
+          <div className="flex justify-center">
+            <div className="grid md:grid-cols-2 gap-6 w-fit">
+            {projects.map((project, idx) => (
+              <motion.div key={project.id} initial={{ opacity: 0, y: 20 }} animate={projectsControls} transition={{ delay: idx * 0.1 }} whileHover={{ y: -10 }} className={`border rounded-xl overflow-hidden transition ${isDarkMode ? 'bg-slate-800 border-slate-600' : 'bg-gray-50 border-slate-200'}`}>
+                <div className={`h-48 flex items-center justify-center text-6xl ${isDarkMode ? 'bg-slate-700' : 'bg-slate-100'}`}>{project.image}</div>
                 <div className="p-6">
-                  <span className={isDarkMode ? "text-xs bg-slate-700 text-white px-3 py-1 rounded-full" : "text-xs bg-slate-200 text-slate-900 px-3 py-1 rounded-full"}>{project.tag}</span>
+                  <span className={`text-xs px-3 py-1 rounded-full ${isDarkMode ? 'bg-slate-700 text-white' : 'bg-slate-200 text-slate-900'}`}>{project.tag}</span>
                   <h3 className="text-xl font-bold mt-3">{project.title}</h3>
-                  <p className={isDarkMode ? "text-gray-300 text-sm mt-2" : "text-slate-600 text-sm mt-2"}>{project.description}</p>
-                  <div className="flex gap-2 mt-4">
-                    {project.tech.map((tech, idx) => (
-                      <span key={idx} className={isDarkMode ? "text-xs px-2 py-1 bg-slate-700 text-gray-300 rounded" : "text-xs px-2 py-1 bg-slate-200 text-slate-700 rounded"}>
-                        {tech}
-                      </span>
+                  <p className={`text-sm mt-2 ${isDarkMode ? 'text-gray-300' : 'text-slate-600'}`}>{project.description}</p>
+                  <div className="flex gap-2 mt-4 flex-wrap">
+                    {project.tech.map((t, i) => (
+                      <span key={i} className={`text-xs px-2 py-1 rounded ${isDarkMode ? 'bg-slate-700 text-gray-300' : 'bg-slate-200 text-slate-700'}`}>{t}</span>
                     ))}
                   </div>
                   <div className="flex gap-4 mt-4">
-                    <a href={project.links.demo} target="_blank" rel="noopener noreferrer" className={isDarkMode ? "text-white text-sm hover:text-gray-300 underline" : "text-slate-900 text-sm hover:text-slate-600 underline"}>
-                      Live
-                    </a>
-                    <a href={project.links.github} target="_blank" rel="noopener noreferrer" className={isDarkMode ? "text-white text-sm hover:text-gray-300 underline" : "text-slate-900 text-sm hover:text-slate-600 underline"}>
-                      Code
-                    </a>
+                    <button className={`text-sm hover:underline ${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}>Live</button>
+                    <button className={`text-sm hover:underline ${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}>Code</button>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
+            </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      <section id="education" className={isDarkMode ? "py-20 px-4 bg-slate-900" : "py-20 px-4 bg-gray-50"}>
+      {/* EDUCATION */}
+      <motion.section ref={sectionRefs.education} id="education" initial={{ opacity: 0, y: 60 }} animate={educationControls} transition={{ duration: 0.8 }} className={`py-20 px-4 pt-32 ${isDarkMode ? 'bg-slate-900' : 'bg-gray-50'}`}>
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold mb-12">Education</h2>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {education.map(edu => (
-              <div key={edu.id} className={isDarkMode ? "p-6 bg-slate-800 border border-gray-600 rounded-xl text-center hover:bg-slate-700 transition" : "p-6 bg-white border border-slate-300 rounded-xl text-center hover:bg-slate-50 transition"}>
-                <div className="text-5xl mb-4">{edu.icon}</div>
-                <p className={isDarkMode ? "text-sm text-gray-400" : "text-sm text-slate-500"}>{edu.period}</p>
-                <p className={isDarkMode ? "text-xs text-gray-500 uppercase mt-2" : "text-xs text-slate-400 uppercase mt-2"}>{edu.level}</p>
-                <h3 className="text-lg font-bold mt-3">{edu.degree}</h3>
-                <p className={isDarkMode ? "text-gray-300" : "text-slate-600"}>{edu.school}</p>
-              </div>
-            ))}
+          <h2 className="text-4xl font-bold mb-12 text-center">Education</h2>
+          <div className="flex justify-center">
+            <div className="grid md:grid-cols-2 gap-6 w-fit">
+              {education.map(edu => (
+                <motion.div key={edu.id} whileHover={{ scale: 1.05 }} className={`p-6 border rounded-xl text-center ${isDarkMode ? 'bg-slate-800 border-slate-600' : 'bg-white border-slate-200'}`}>
+                  <div className={`w-20 h-20 mx-auto mb-4 rounded-full flex items-center justify-center text-3xl ${isDarkMode ? 'bg-slate-700' : 'bg-slate-100'}`}>{edu.icon}</div>
+                  <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-slate-500'}`}>{edu.period}</p>
+                  <p className={`text-xs uppercase mt-2 ${isDarkMode ? 'text-gray-500' : 'text-slate-400'}`}>{edu.level}</p>
+                  <h3 className="text-lg font-bold mt-3">{edu.degree}</h3>
+                  <p className={isDarkMode ? 'text-gray-300' : 'text-slate-600'}>{edu.school}</p>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      <section id="contact" className={isDarkMode ? "py-20 px-4 bg-slate-800" : "py-20 px-4 bg-white"}>
+      {/* CONTACT */}
+      <motion.section ref={sectionRefs.contact} id="contact" initial={{ opacity: 0, y: 60 }} animate={contactControls} transition={{ duration: 0.8 }} className={`py-20 px-4 pt-32 ${isDarkMode ? 'bg-slate-800' : 'bg-white'}`}>
         <div className="max-w-4xl mx-auto">
           <h2 className="text-4xl font-bold mb-12 text-center">Get In Touch</h2>
-
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-6">
-              <div className={isDarkMode ? "p-6 bg-slate-800 border border-gray-600 rounded-xl" : "p-6 bg-white border border-slate-300 rounded-xl"}>
+              <div className={`p-6 border rounded-xl ${isDarkMode ? 'bg-slate-800 border-slate-600' : 'bg-gray-50 border-slate-200'}`}>
                 <h3 className="font-bold text-lg">Email</h3>
-                <p className={isDarkMode ? "text-gray-300" : "text-slate-600"}>your.email@example.com</p>
+                <p className={isDarkMode ? 'text-gray-300' : 'text-slate-600'}>jtlandicho@student.apc.edu.ph</p>
               </div>
-
-              <div className={isDarkMode ? "p-6 bg-slate-800 border border-gray-600 rounded-xl" : "p-6 bg-white border border-slate-300 rounded-xl"}>
+              <div className={`p-6 border rounded-xl ${isDarkMode ? 'bg-slate-800 border-slate-600' : 'bg-gray-50 border-slate-200'}`}>
                 <h3 className="font-bold text-lg">Location</h3>
-                <p className={isDarkMode ? "text-gray-300" : "text-slate-600"}>Manila, Philippines</p>
-              </div>
-
-              <div className="flex gap-4">
-                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className={isDarkMode ? "flex-1 p-4 bg-slate-800 rounded-lg text-center hover:bg-slate-700 transition" : "flex-1 p-4 bg-slate-200 rounded-lg text-center hover:bg-slate-300 transition"}>
-                  GitHub
-                </a>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className={isDarkMode ? "flex-1 p-4 bg-slate-800 rounded-lg text-center hover:bg-slate-700 transition" : "flex-1 p-4 bg-slate-200 rounded-lg text-center hover:bg-slate-300 transition"}>
-                  LinkedIn
-                </a>
+                <p className={isDarkMode ? 'text-gray-300' : 'text-slate-600'}>Taguig City, Manila, Philippines</p>
               </div>
             </div>
-
-            <form onSubmit={handleFormSubmit} className={isDarkMode ? "space-y-4 p-6 bg-slate-800 border border-gray-600 rounded-xl" : "space-y-4 p-6 bg-white border border-slate-300 rounded-xl"}>
+            <div className={`space-y-4 p-6 border rounded-xl ${isDarkMode ? 'bg-slate-800 border-slate-600' : 'bg-gray-50 border-slate-200'}`}>
               <div>
-                <label className="block text-sm font-semibold mb-2">Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleFormChange}
-                  required
-                  className={isDarkMode ? "w-full px-4 py-2 bg-slate-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:border-white focus:outline-none transition" : "w-full px-4 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:border-slate-900 focus:outline-none transition"}
-                  placeholder="Your name"
-                />
+                <label htmlFor="name" className="block text-sm font-semibold mb-2">Name</label>
+                <input id="name" type="text" name="name" value={formData.name} onChange={handleFormChange} className={`w-full px-4 py-2 rounded-lg border ${isDarkMode ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-slate-300 text-slate-900'}`} />
               </div>
-
               <div>
-                <label className="block text-sm font-semibold mb-2">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleFormChange}
-                  required
-                  className={isDarkMode ? "w-full px-4 py-2 bg-slate-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:border-white focus:outline-none transition" : "w-full px-4 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:border-slate-900 focus:outline-none transition"}
-                  placeholder="your.email@example.com"
-                />
+                <label htmlFor="email" className="block text-sm font-semibold mb-2">Email</label>
+                <input id="email" type="email" name="email" value={formData.email} onChange={handleFormChange} className={`w-full px-4 py-2 rounded-lg border ${isDarkMode ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-slate-300 text-slate-900'}`} />
               </div>
-
               <div>
-                <label className="block text-sm font-semibold mb-2">Message</label>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleFormChange}
-                  required
-                  rows="4"
-                  className={isDarkMode ? "w-full px-4 py-2 bg-slate-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:border-white focus:outline-none transition" : "w-full px-4 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 placeholder-slate-400 focus:border-slate-900 focus:outline-none transition"}
-                  placeholder="Your message..."
-                ></textarea>
+                <label htmlFor="message" className="block text-sm font-semibold mb-2">Message</label>
+                <textarea id="message" name="message" value={formData.message} onChange={handleFormChange} rows="4" className={`w-full px-4 py-2 rounded-lg border ${isDarkMode ? 'bg-slate-700 border-slate-600 text-white' : 'bg-white border-slate-300 text-slate-900'}`} />
               </div>
-
-              <button
-                type="submit"
-                disabled={formStatus === 'sending'}
-                className={isDarkMode ? "w-full px-6 py-3 bg-white text-slate-900 rounded-lg font-semibold hover:bg-gray-200 transition disabled:opacity-50" : "w-full px-6 py-3 bg-slate-900 text-white rounded-lg font-semibold hover:bg-slate-800 transition disabled:opacity-50"}
-              >
-                {formStatus === 'sending' ? 'Sending...' : 'Send Message'}
-              </button>
-
+              <button onClick={handleFormSubmit} className={`w-full px-6 py-3 rounded-lg font-semibold transition ${isDarkMode ? 'bg-white text-slate-900 hover:bg-gray-200' : 'bg-slate-900 text-white hover:bg-slate-800'}`}>{formStatus === 'sending' ? 'Sending...' : 'Send Message'}              </button>
               {formStatus === 'success' && <p className="text-green-400 text-center">Message sent!</p>}
-              {formStatus === 'error' && <p className="text-red-400 text-center">Failed to send. Try again.</p>}
-            </form>
+            </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      <footer className={isDarkMode ? "border-t border-slate-700 py-8 px-4 text-center text-gray-400 bg-slate-900" : "border-t border-slate-200 py-8 px-4 text-center text-slate-500 bg-gray-50"}>
-        <p>© 2025 Your Name. All rights reserved.</p>
+      <footer className={`border-t py-8 px-4 text-center ${isDarkMode ? 'border-slate-700 bg-slate-900 text-gray-400' : 'border-slate-200 bg-gray-50 text-slate-600'}`}>
+        <p>© 2025 John Jorel T. Landicho. All rights reserved.</p>
       </footer>
     </div>
   );
