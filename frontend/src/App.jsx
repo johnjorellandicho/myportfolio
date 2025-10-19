@@ -215,12 +215,12 @@ export default function Portfolio() {
         period: 'Aug 2022 – Present',
         icon: '/images/cropped-APC_Seal-Official-scaled.png',
         level: 'College',
-        gwa: '3.8'
+        gwa: '(Tentative)'
 
       },
       {
         id: 2,
-        degree: 'Senior High School',
+        degree: 'TECHVOC-ICT',
         school: 'Signal Village National High School',
         period: '2020 – 2022',
         icon: '/images/svnhs.png',
