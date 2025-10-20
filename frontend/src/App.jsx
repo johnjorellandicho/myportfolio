@@ -133,7 +133,7 @@ export default function Portfolio() {
         image: '/images/alwaysontrack.png',
         tech: ['Flutter', 'Firebase', 'IoT', 'MongoDB', 'Node.js'],
         tag: 'Mobile Application',
-        github: 'https://github.com/yourusername/alwaysontrack',
+        github: 'https://github.com/johnjorellandicho/alwaysontrackimpossible',
         demo: 'https://your-live-demo-link.com'
 
       },
@@ -144,7 +144,6 @@ export default function Portfolio() {
         image: '/images/namfrel.png',
         tech: ['Next.js', 'PowerBI'],
         tag: 'Web Application',
-        github: 'https://github.com/yourusername/alwaysontrack',
         demo: 'namfrel-analytics-apc.org'
         
       },
@@ -156,7 +155,6 @@ export default function Portfolio() {
         tech: ['Django', 'MongoDB', 'Redis', 'IoT', 'PostgreSQL'],
         tag: ['IoT System', 'Web Application'],
         github: 'https://github.com/johnjorellandicho/djangofinals',
-        demo: 'https://your-live-demo-link.com'
       },
       {
         id: 4,
@@ -166,7 +164,6 @@ export default function Portfolio() {
         tech: ['Android Studio', 'XML', 'Java', 'Firebase'],
         tag: 'Mobile Application',
         github: 'https://github.com/tvsayson/MobProg_2nd-year_1st-term.git',
-        demo: 'https://your-live-demo-link.com'
       }
     ]);
 
