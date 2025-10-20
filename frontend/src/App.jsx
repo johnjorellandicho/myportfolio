@@ -144,7 +144,7 @@ export default function Portfolio() {
         image: '/images/namfrel.png',
         tech: ['Next.js', 'PowerBI'],
         tag: 'Web Application',
-        demo: 'namfrel-analytics-apc.org'
+        demo: 'https://namfrel-analytics-apc.org'
         
       },
       {
