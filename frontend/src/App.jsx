@@ -22,6 +22,7 @@ import {
   SiFirebase,
   SiRedis,
   SiCplusplus,
+  SiDart,
   SiFlutter
 } from 'react-icons/si';
 
@@ -83,6 +84,7 @@ export default function Portfolio() {
     { name: 'MySQL', category: 'Backend', icon: SiMysql },
     { name: 'Firebase', category: 'Backend', icon: SiFirebase },
     { name: 'Redis', category: 'Backend', icon: SiRedis },
+    { name: 'Dart', category: 'Language', icon: SiDart },
     { name: 'Flutter', category: 'Mobile', icon: SiFlutter }
   ];
 
@@ -128,37 +130,43 @@ export default function Portfolio() {
         id: 1,
         title: 'AlwaysOnTrack (Capstone)',
         description: 'Mobile IoT tracker app with real-time analytics built using Flutter and Firebase.',
-        image: '📱',
-        tech: ['Flutter', 'Firebase', 'IoT'],
+        image: '/images/alwaysontrack.png',
+        tech: ['Flutter', 'Firebase', 'IoT', 'MongoDB', 'Node.js'],
         tag: 'Mobile Application',
-        links: { demo: '#', github: '#' }
+        github: 'https://github.com/yourusername/alwaysontrack',
+        demo: 'https://your-live-demo-link.com'
+
       },
       {
         id: 2,
         title: 'NAMFREL Analytics',
         description: 'Election data analytics platform ensuring system reliability and data accuracy.',
-        image: '📊',
-        tech: ['Django', 'PostgreSQL', 'React'],
+        image: '/images/namfrel.png',
+        tech: ['Next.js', 'PowerBI'],
         tag: 'Web Application',
-        links: { demo: '#', github: '#' }
+        github: 'https://github.com/yourusername/alwaysontrack',
+        demo: 'namfrel-analytics-apc.org'
+        
       },
       {
         id: 3,
         title: 'ParkSense',
         description: 'Full-stack parking management system integrating hardware sensors, MongoDB, and Redis.',
-        image: '🚗',
-        tech: ['Django', 'MongoDB', 'Redis'],
-        tag: 'IoT System',
-        links: { demo: '#', github: '#' }
+        image: '/images/parksense.png',
+        tech: ['Django', 'MongoDB', 'Redis', 'IoT', 'PostgreSQL'],
+        tag: ['IoT System', 'Web Application'],
+        github: 'https://github.com/johnjorellandicho/djangofinals',
+        demo: 'https://your-live-demo-link.com'
       },
       {
         id: 4,
         title: 'Bamboo Warriors Philippines Application',
         description: 'Mobile application for Bamboo Warriors Philippines designed to educate and promote bamboo propagation. Features an intuitive interface with seamless navigation and optimized responsiveness across Android devices.',
-        image: '🚗',
-        tech: ['Android Studio', 'Figma', 'Java'],
+        image: '/images/bwp.png',
+        tech: ['Android Studio', 'XML', 'Java', 'Firebase'],
         tag: 'Mobile Application',
-        links: { demo: '#', github: '#' }
+        github: 'https://github.com/tvsayson/MobProg_2nd-year_1st-term.git',
+        demo: 'https://your-live-demo-link.com'
       }
     ]);
 
@@ -170,7 +178,9 @@ export default function Portfolio() {
         period: 'Aug 2025 – Oct 2025',
         bullets: [
           'Led development of real-time tracking and monitoring mobile app with IoT integration.',
-          'Ensured accurate data visualization and seamless cross-platform experience.'
+          'Ensured accurate data visualization and seamless cross-platform experience.',
+          'Architected backend systems and database schema to handle real-time data streams from IoT devices.',
+          'Developed core features including notifications, alerts, and chatbot functionality.'
         ]
       },
       {
@@ -463,21 +473,23 @@ export default function Portfolio() {
             <div className="grid md:grid-cols-2 gap-6 w-fit">
             {projects.map((project, idx) => (
               <motion.div key={project.id} initial={{ opacity: 0, y: 20 }} animate={projectsControls} transition={{ delay: idx * 0.1 }} whileHover={{ y: -10 }} className={`border rounded-xl overflow-hidden transition ${isDarkMode ? 'bg-slate-800 border-slate-600' : 'bg-gray-50 border-slate-200'}`}>
-                <div className={`h-48 flex items-center justify-center text-6xl ${isDarkMode ? 'bg-slate-700' : 'bg-slate-100'}`}>{project.image}</div>
-                <div className="p-6">
-                  <span className={`text-xs px-3 py-1 rounded-full ${isDarkMode ? 'bg-slate-700 text-white' : 'bg-slate-200 text-slate-900'}`}>{project.tag}</span>
-                  <h3 className="text-xl font-bold mt-3">{project.title}</h3>
-                  <p className={`text-sm mt-2 ${isDarkMode ? 'text-gray-300' : 'text-slate-600'}`}>{project.description}</p>
-                  <div className="flex gap-2 mt-4 flex-wrap">
-                    {project.tech.map((t, i) => (
-                      <span key={i} className={`text-xs px-2 py-1 rounded ${isDarkMode ? 'bg-slate-700 text-gray-300' : 'bg-slate-200 text-slate-700'}`}>{t}</span>
-                    ))}
-                  </div>
-                  <div className="flex gap-4 mt-4">
-                    <button className={`text-sm hover:underline ${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}>Live</button>
-                    <button className={`text-sm hover:underline ${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}>Code</button>
-                  </div>
+               <div className={`h-48 flex items-center justify-center overflow-hidden ${isDarkMode ? 'bg-slate-700' : 'bg-slate-100'}`}>
+                <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
+              </div>
+              <div className="p-6">
+                <span className={`text-xs px-3 py-1 rounded-full ${isDarkMode ? 'bg-slate-700 text-white' : 'bg-slate-200 text-slate-900'}`}>{project.tag}</span>
+                <h3 className="text-xl font-bold mt-3">{project.title}</h3>
+                <p className={`text-sm mt-2 ${isDarkMode ? 'text-gray-300' : 'text-slate-600'}`}>{project.description}</p>
+                <div className="flex gap-2 mt-4 flex-wrap">
+                  {project.tech.map((t, i) => (
+                    <span key={i} className={`text-xs px-2 py-1 rounded ${isDarkMode ? 'bg-slate-700 text-gray-300' : 'bg-slate-200 text-slate-700'}`}>{t}</span>
+                  ))}
                 </div>
+                <div className="flex gap-4 mt-4">
+                  <a href={project.demo} target="_blank" rel="noopener noreferrer" className={`text-sm hover:underline ${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}>Live</a>
+                  <a href={project.github} target="_blank" rel="noopener noreferrer" className={`text-sm hover:underline ${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-slate-600 hover:text-slate-900'}`}>Code</a>
+                </div>
+              </div>
               </motion.div>
             ))}
             </div>
